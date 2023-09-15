@@ -1,0 +1,49 @@
+#include "stm32f3xx.h"
+void delay(unsigned int ) ;// delay function
+int main() {
+    RCC->AHBENR |= (1U << 17) | (1U << 19); // enabling rcc for portA & portC
+    GPIOA->MODER |= (1U << 10); //setting pin 5 to output mode
+    GPIOA->MODER &= ~ (1U << 11);//setting pin 5 to output mode
+    GPIOC->MODER &= ~((1 << 26) | (1 << 27)); // setting pin 13 to input mode
+    int ledState = 0; //variable to monitor the state of led
+    while (1) {
+        if (GPIOC->IDR & (1 << 13)) //giving input data to push button as high
+        {
+           delay(10);//for key debounce
+            if (GPIOC->IDR & (1 << 13))
+            {
+              ledState = 1 - ledState;
+              if (ledState) {
+                   GPIOA->ODR |= (1U << 5);
+              }
+              else
+              {
+                  GPIOA->ODR &= ~ (1U << 5);
+
+              }
+                while (GPIOC->IDR & (1 << 13)) {
+                }
+              delay(1);
+
+            }
+
+        }
+
+    }
+
+}
+
+void delay(unsigned int a) // delay function
+
+{
+
+    unsigned int i, j;
+
+    for (j = 0; j < a; j++){
+
+        for (i = 1; i < 60000; i++){
+
+    }  }
+
+}
+
